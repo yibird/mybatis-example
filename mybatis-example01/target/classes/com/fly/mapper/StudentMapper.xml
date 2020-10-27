@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace(命名空间)用于指定Mapper与javaDao的映射关系 唯一  -->
+<mapper namespace="com.fly.mapper.StudentMapper">
+    <!-- 设置java实体对象与数据库字段的映射关系 -->
+    <resultMap id="studentMap" type="com.fly.entity.Student">
+        <id property="id" column="id"/>
+        <result property="stuName" column="stuName"/>
+        <result property="stuNo" column="stuNo"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="address" column="address"/>
+        <result property="birthday" column="birthday"/>
+    </resultMap>
+
+    <!-- 定义sql片段 如果多个语句有重新的内容,可以把它提取到一个sql标签,然后通过
+    <include/>标签的refid属性指定引入sql标签的id即可 -->
+    <sql id="student_sql">
+        id,stuName,stuNo,age,sex,address,birthday
+    </sql>
+
+    <!--
+        insert标签标识是一个插入操作,id="addStudent"表示当前操作与
+        com.fly.mapper.StudentMapper的addStudent是对应关系,
+        parameterType用于指定addStudent方法中参数的类型。
+
+       sqlSession.insert()传入对象参数并不需要#{参数名.属性名}这种形式访问属性,它会对对象进行处理,使得我们可以直接访问属性,
+       例如传入的参数是student,如果要访问stuName属性,写成#{stuName}即可访问
+     -->
+    <insert id="addStudent" parameterType="com.fly.entity.Student">
+        insert into student(stuName,stuNo,age,sex,address,birthday) values(#{stuName},
+        #{stuNo},#{age},#{sex},#{address},#{birthday});
+    </insert>
+
+    <!--由于delStudentById方法传入一个int 类型的参数,所以parameterType的值为java.lang.Integer -->
+    <delete id="delStudentById"  parameterType="java.lang.Integer">
+        delete from student where  id=#{id}
+    </delete>
+
+    <update id="upStudent" parameterType="com.fly.entity.Student">
+        update student set stuName=#{stuName} where id=#{id}
+    </update>
+
+    <!--
+        parameterType用于设置对应DAO类中方法的参数类型
+        resultType用于设置对饮DAO类中方法的返回值类型,insert、delete、update标签都不用写resultType属性,
+        默认返回int类型
+    -->
+    <select id="queryStudentById" parameterType="java.lang.Integer" resultType="com.fly.entity.Student">
+        select <include refid="student_sql"/> from student where id=#{id};
+    </select>
+
+    <select id="queryStudent" resultMap="studentMap">
+            select <include refid="student_sql"/> from student;
+    </select>
+</mapper>

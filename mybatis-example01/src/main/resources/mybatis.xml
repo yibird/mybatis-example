@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- environments用于指定运行环境配置,default="development"指定运行环境为开发环境 -->
+    <environments default="development">
+        <environment id="development">
+            <!-- 配置事务管理器 类型为JDBC -->
+            <transactionManager type="JDBC"/>
+            <!-- 配置数据源 数据源类型为POOLED  -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTC&amp;allowMultiQueries=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- mappers指定一组mapper(映射器) -->
+    <mappers>
+        <!-- mapper的XML映射文件包含了SQL代码和映射定义信息,resource指定mapper文件的地址,
+        待会要在src/main/resources目录下创建一个mapper文件夹,
+        然后在mapper文件夹创建一个名为studentMapper.xml的mapper映射文件
+         -->
+        <mapper resource="mapper/studentMapper.xml"/>
+    </mappers>
+</configuration>
